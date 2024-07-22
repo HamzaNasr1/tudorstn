@@ -1,0 +1,13 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+# config/routes.yaml
+update_quantity:
+    path: /update-quantity
+    controller: App\Controller\ProduitController::updateQuantity
+    methods: [POST]
+login:
+    path: /login
+    controller: App\Controller\LoginController::login
+    methods: [GET, POST]

@@ -1,0 +1,490 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit index{% endblock %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoezProjet</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+
+    <link rel="stylesheet" href="../vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="../vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/liste_users.css">
+     <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" href="../images/favicon.svg" type="image/x-icon">
+</head>
+<style>
+    @media (min-width: 1200px) {
+        .custom-table-container {
+            max-width: 1200px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .custom-table-container {
+            max-width: 700px;
+        }
+    }
+
+    .table-text {
+        padding: 5px;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table td, .table th {
+        padding: 5px;
+    }
+    @media (min-width: 1200px) {
+    .custom-table-container {
+        max-width: 1200px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .custom-table-container {
+        max-width: 700px;
+    }
+}
+
+</style>
+
+<body>
+    
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="logo">
+                            <a href="index.html">Tu Dors</a>
+                        </div>
+                        <div class="toggler">
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                       
+
+                        <li class="sidebar-item active ">
+                            <a href="table.html" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>Produits</span>
+                            </a>
+                        </li>
+
+                        
+                        <li class="sidebar-title">Extra UI</li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-pentagon-fill"></i>
+                                <span>Widgets</span>
+                            </a>
+                          
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Produits</h3>
+                            <p class="text-subtitle text-muted">Tableau des produits</p>
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Table</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--  Inverse table start -->
+                <section class="section">
+                    <div class="row" id="table-inverse">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+
+                                </div>
+                                <div class="card-content">
+
+ {% for produit in produits %}
+    <!-- Modal -->
+    <div class="modal fade" id="gerer-{{produit.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="height:500px;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modifier le stock d'un produit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" >
+                <div class="quantity"  style="inset:0;">
+  <button class="minus" aria-label="Decrease">&minus;</button>
+  <input type="number" class="input-box" value="{{produit.quantite}}" min="0" max="10000" id="quantity-{{ produit.id }}">
+  <button class="plus" aria-label="Increase">&plus;</button>
+</div>
+<form method="post" action="{{ path('app_produit_delete', {'id': produit.id}) }}">
+    <input type="hidden" id="csrf_token" value="{{ csrf_token('update' ~ produit.id) }}">
+
+                    <p class="card2-heading">supprimer ce produit</p>
+                                    <button class="bin-button" type="submit" style="margin-left:50px;">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 39 7"
+      class="bin-top"
+    >
+      <line stroke-width="4" stroke="white" y2="5" x2="39" y1="5"></line>
+      <line
+        stroke-width="3"
+        stroke="white"
+        y2="1.5"
+        x2="26.0357"
+        y1="1.5"
+        x1="12"
+      ></line>
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 33 39"
+      class="bin-bottom"
+    >
+      <mask fill="white" id="path-1-inside-1_8_19">
+        <path
+          d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
+        ></path>
+      </mask>
+      <path
+        mask="url(#path-1-inside-1_8_19)"
+        fill="white"
+        d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
+      ></path>
+      <path stroke-width="4" stroke="white" d="M12 6L12 29"></path>
+      <path stroke-width="4" stroke="white" d="M21 6V29"></path>
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 89 80"
+      class="garbage"
+    >
+      <path
+        fill="white"
+        d="M20.5 10.5L37.5 15.5L42.5 11.5L51.5 12.5L68.75 0L72 11.5L79.5 12.5H88.5L87 22L68.75 31.5L75.5066 25L86 26L87 35.5L77.5 48L70.5 49.5L80 50L77.5 71.5L63.5 58.5L53.5 68.5L65.5 70.5L45.5 73L35.5 79.5L28 67L16 63L12 51.5L0 48L16 25L22.5 17L20.5 10.5Z"
+      ></path>
+    </svg>
+  </button>
+  </form>
+                    <p class="card2-description">
+                        <!-- Ajoutez d'autres informations du client selon vos besoins -->
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_token" value="{{ csrf_token('update' ~ produit.id) }}">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+    <button type="button" class="btn btn-primary" onclick="updateQuantity({{ produit.id }})">Confirmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   <script>
+function updateQuantity(produitId) {
+    var quantityInput = document.getElementById('quantity-' + produitId);
+    if (!quantityInput) {
+        console.error('Element not found: quantity-' + produitId);
+        return;
+    }
+    
+    var newQuantity = quantityInput.value;
+    var token = document.getElementById('csrf_token').value;
+
+    fetch('/update-quantity', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': token
+        },
+        body: JSON.stringify({
+            id: produitId,
+            quantite: newQuantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            
+            alert('Quantité mise à jour avec succès');
+                        window.location.href = '/produit'; // Assurez-vous que cette URL correspond à votre route app_produit_index
+
+        } else {
+            alert('Erreur lors de la mise à jour de la quantité: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Erreur lors de la mise à jour de la quantité');
+    });
+}
+
+</script>
+
+{% endfor %}
+<div class="row">
+    <div class="col-md-6">
+        <button class="btnadd" id="open-modal-btn">Ajouter Produit</button>
+    </div>
+    <div class="col-md-6">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher...">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-6">
+      <label for="sortOrder">Trier par quantité :</label>
+        <select id="sortOrder" class="form-control">
+            <option value="" disabled selected>Choisir le type de tri</option>
+            <option value="asc">Croissant</option>
+            <option value="desc">Décroissant</option>
+        </select>
+    </div>
+ 
+    
+</div>
+    <table class="table" id="table">
+        <thead>
+            <tr>
+               
+                <th>Nom</th>
+                <th>Photo</th>
+                <th>Quantite</th>
+                <th>Description</th>
+                <th>Fournisseur</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+        {% for produit in produits %}
+            <tr>
+               
+                <td style="color:#435ebe;font-size:18px;font-weight:700;">
+                    {{ produit.nom }}
+                     <a href="#" data-toggle="modal" data-target="#gerer-{{produit.id}}">
+    Gerer
+     <i class="bi bi-pen"></i>
+    </a>
+                    </td>
+<td>
+    <img src="../{{ produit.photo }}"  alt="" style="max-width: 100px; height: auto;">
+</td>
+
+<td class="quantite status column-centered" >
+    
+    {% if produit.quantite < 10 %}
+        <span class="suspendu" >{{ produit.quantite }}</span>
+    {% elseif produit.quantite < 20 %}
+        <span class="waiting">{{ produit.quantite }}</span>
+    {% else %}
+        <span class="active">{{ produit.quantite }}</span>
+    {% endif %}
+ 
+
+               
+                <td>{{ produit.description }}</td>
+                <td>{{ produit.fournisseur }}</td>
+        
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+<div class="modal" style="background: #e8e8e8;" id="modal" style="display: none;">
+  <div class="modal-header">
+    <div class="modal-logo">
+      <span class="logo-circle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="25"
+          height="25"
+          viewBox="0 0 512 419.116"
+        >
+          <defs>
+            <clipPath id="clip-folder-new">
+              <rect width="512" height="419.116"></rect>
+            </clipPath>
+          </defs>
+          <g id="folder-new" clip-path="url(#clip-folder-new)">
+            <path
+              id="Union_1"
+              data-name="Union 1"
+              d="M16.991,419.116A16.989,16.989,0,0,1,0,402.125V16.991A16.989,16.989,0,0,1,16.991,0H146.124a17,17,0,0,1,10.342,3.513L227.217,57.77H437.805A16.989,16.989,0,0,1,454.8,74.761v53.244h40.213A16.992,16.992,0,0,1,511.6,148.657L454.966,405.222a17,17,0,0,1-16.6,13.332H410.053v.562ZM63.06,384.573H424.722L473.86,161.988H112.2Z"
+              fill="var(--c-action-primary)"
+              stroke=""
+              stroke-width="1"
+            ></path>
+          </g>
+        </svg>
+      </span>
+    </div>
+    <button class="btn-close" id="close-modal-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path fill="none" d="M0 0h24v24H0V0z"></path>
+        <path
+          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+          fill="var(--c-text-secondary)"
+        ></path>
+      </svg>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="modal-title">Ajouter un nouveau produit</p>
+    <p class="modal-description">Remplir le formulaire suivant</p>
+
+    {{ include('produit/_form.html.twig') }}
+
+  
+</div>
+
+
+    </table>
+
+</body>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = document.getElementById("modal");
+  const openModalBtn = document.getElementById("open-modal-btn");
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const cancelModalBtn = document.getElementById("cancel-modal-btn");
+
+  openModalBtn.addEventListener("click", function() {
+    modal.style.display = "block";
+  });
+
+  closeModalBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  cancelModalBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+////////////////////////////////////////////////////
+
+</script>
+<script>
+document.querySelectorAll(".quantity").forEach(quantityContainer => {
+  const minusBtn = quantityContainer.querySelector(".minus");
+  const plusBtn = quantityContainer.querySelector(".plus");
+  const inputBox = quantityContainer.querySelector(".input-box");
+
+  updateButtonStates();
+
+  quantityContainer.addEventListener("click", handleButtonClick);
+  inputBox.addEventListener("input", handleQuantityChange);
+
+  function updateButtonStates() {
+    const value = parseInt(inputBox.value);
+    minusBtn.disabled = value <= 0;
+    plusBtn.disabled = value >= parseInt(inputBox.max);
+  }
+
+  function handleButtonClick(event) {
+    if (event.target.classList.contains("minus")) {
+      decreaseValue();
+    } else if (event.target.classList.contains("plus")) {
+      increaseValue();
+    }
+  }
+
+  function decreaseValue() {
+    let value = parseInt(inputBox.value);
+    value = isNaN(value) ? 0 : Math.max(value - 1, 0); // Change limit to 0
+    inputBox.value = value;
+    updateButtonStates();
+    handleQuantityChange();
+  }
+
+  function increaseValue() {
+    let value = parseInt(inputBox.value);
+    value = isNaN(value) ? 0 : Math.min(value + 1, parseInt(inputBox.max));
+    inputBox.value = value;
+    updateButtonStates();
+    handleQuantityChange();
+  }
+
+  function handleQuantityChange() {
+    let value = parseInt(inputBox.value);
+    value = isNaN(value) ? 0 : value;
+
+    // Execute your code here based on the updated quantity value
+    console.log("Quantity changed:", value);
+  }
+});
+
+</script>
+
+<!-- Bootstrap CSS -->
+
+<!-- jQuery (nécessaire pour Bootstrap JavaScript) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="../vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+
+    <script src="../vendors/apexcharts/apexcharts.js"></script>
+    <script src="../js/pages/dashboard.js"></script>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/chercher.js"></script>
+{% endblock %}
